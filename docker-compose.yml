@@ -1,0 +1,37 @@
+services:
+  backend:
+    container_name: backend
+    build:
+      context: ./gestao_de_pontos
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/gestaodepontosdb
+      - SPRING_DATASOURCE_USERNAME=docker
+      - SPRING_DATASOURCE_PASSWORD=docker
+    networks:
+      - app-network
+    depends_on:
+      - database
+
+  database:
+    container_name: database
+    image: bitnami/postgresql
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRESQL_USERNAME=docker
+      - POSTGRESQL_PASSWORD=docker
+      - POSTGRESQL_DATABASE=gestaodepontosdb
+    volumes:
+      - database-data:/bitnami/postgresql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  database-data:

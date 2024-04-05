@@ -1,0 +1,45 @@
+-- Tabela de Usuários
+CREATE TABLE Users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
+    role_id INT NOT NULL,
+    work_regime ENUM('6_hours', '8_hours') NOT NULL,
+    FOREIGN KEY (role_id) REFERENCES Roles(id)
+);
+
+-- Tabela de Pontos de Jornada de Trabalho
+CREATE TABLE TimePoints (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    timestamp DATETIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(id)
+);
+
+-- Tabela de Pausas (Opcional)
+CREATE TABLE Breaks (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    start_time DATETIME NOT NULL,
+    end_time DATETIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(id)
+);
+
+-- Tabela de Tipos de Pausa (Opcional)
+CREATE TABLE BreakTypes (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL
+);
+
+-- Tabela de Departamentos (Opcional)
+CREATE TABLE Departments (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL
+);
+
+-- Tabela de Cargo/Função (Opcional)
+CREATE TABLE Roles (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL
+);
