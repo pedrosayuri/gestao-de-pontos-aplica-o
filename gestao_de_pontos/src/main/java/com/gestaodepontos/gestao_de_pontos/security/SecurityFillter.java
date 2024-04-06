@@ -43,7 +43,7 @@ public class SecurityFillter extends OncePerRequestFilter {
                     request.setAttribute("user_id", subjectToken.getSubject());
     
                     var roles = subjectToken.getClaim("roles").asList(Object.class);
-    
+
                     var grants = roles.stream()
                         .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toString().toUpperCase()))
                         .toList();

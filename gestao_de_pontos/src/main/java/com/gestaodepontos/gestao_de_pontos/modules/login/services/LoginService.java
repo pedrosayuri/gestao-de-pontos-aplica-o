@@ -2,6 +2,7 @@ package com.gestaodepontos.gestao_de_pontos.modules.login.services;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
 
 import javax.naming.AuthenticationException;
 
@@ -41,14 +42,6 @@ public class LoginService {
             throw new CustomException(HttpStatus.UNAUTHORIZED.value(), "Email/Senha inválidos.");
         }
 
-        var userRoles = "";
-
-        if (user.getRoleId() == 1) {
-            userRoles = "ADMIN";
-        } else if (user.getRoleId() == 2) {
-            userRoles = "COMUM";
-        }
-
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
         var expiresIn = Instant.now().plus(Duration.ofHours(24));
@@ -59,7 +52,8 @@ public class LoginService {
             .withClaim("name", user.getUsername())
             .withClaim("email", user.getEmail())
             .withExpiresAt(java.util.Date.from(expiresIn))
-            .withClaim("roles", userRoles)
+            .withClaim("regime", user.getWorkRegime().toString())
+            .withClaim("roles", Arrays.asList(user.getUserRole().toString()))
             .sign(algorithm);
 
         var authUserResponseDTO = AuthUserResponseDTO.builder()

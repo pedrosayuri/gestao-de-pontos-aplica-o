@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.gestaodepontos.gestao_de_pontos.exceptions.MessageException;
 import com.gestaodepontos.gestao_de_pontos.modules.users.entities.UserEntity;
+import com.gestaodepontos.gestao_de_pontos.modules.users.enums.UserType;
 import com.gestaodepontos.gestao_de_pontos.modules.users.repositories.UserRepository;
 
 @Service
@@ -26,27 +27,27 @@ public class CreateUserService {
         var password = passwordEncoder.encode(userEntity.getPassword());
         userEntity.setPassword(password);
 
-        validateUserDoesNotExist(userEntity.getUsername(), userEntity.getEmail());
+        validateUserDoesNotExist(userEntity.getEmail());
         validateUserNameLength(userEntity.getUsername());
-        // validateUserRole(userEntity.getRoleId());
+        validateUserRole(userEntity.getUserRole());
     }
 
-    private void validateUserDoesNotExist(String name, String email) {
-        if (userRepository.findByUsernameOrEmail(name, email).isPresent()) {
+    private void validateUserDoesNotExist( String email) {
+        if (userRepository.findByEmail(email).isPresent()) {
             throw new MessageException("Usuário já existe com esse e-mail");
         }
     }
 
     private void validateUserNameLength(String name) {
         if (name.length() < 3) {
-            throw new IllegalArgumentException("O nome do usuário deve ter pelo menos 3 caracteres");
+            throw new MessageException("O nome do usuário deve ter pelo menos 3 caracteres");
         }
     }
 
-    // private void validateUserRole(Long userType) {
-    //     if (userType != UserType.FREELANCER && userType != UserType.EMPLOYER && userType != UserType.ADMIN) {
-    //         throw new IllegalArgumentException("Tipo de usuário inválido");
-    //     }
-    // }
+    private void validateUserRole(UserType userType) {
+        if (userType != UserType.ADMIN && userType != UserType.COMUM) {
+            throw new MessageException("Tipo de usuário inválido");
+        }
+    }
     
 }
