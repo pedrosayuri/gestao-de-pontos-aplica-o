@@ -1,6 +1,4 @@
-# App
-
-Gestão de Pontos de Jornada de Trabalho
+# Gestão de Pontos de Jornada de Trabalho
 
 - [x] O sistema deve ser protegido por login e senha, e somente após autenticado o usuário poderá visualizar os dados;
 
