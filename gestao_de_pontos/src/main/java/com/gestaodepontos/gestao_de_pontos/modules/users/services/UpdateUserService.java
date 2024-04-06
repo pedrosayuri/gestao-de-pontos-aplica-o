@@ -40,11 +40,6 @@ public class UpdateUserService {
             updated = true;
         }
 
-        // if (updatedUser.getUserType() != null && updatedUser.getUserType() != user.getUserType()) {
-        //     user.setUserType(updatedUser.getUserType());
-        //     updated = true;
-        // }
-
         if (updated) {
             user.setModifiedAt(LocalDateTime.now());
         } else {
