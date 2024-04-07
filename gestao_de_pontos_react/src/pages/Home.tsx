@@ -9,22 +9,25 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import PersonIcon from '@mui/icons-material/Person';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
-import DraftsIcon from '@mui/icons-material/Drafts';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
 import { Container } from "@mui/material";
 
 
 interface DecodedToken {
     name: string;
     roles: string[];
+    sub: string;
   }
 
 export function Home() {
     const navigate = useNavigate();
     const [tokenIsValid, setTokenIsValid] = useState(false);
     const [isUserAdmin, setIsUserAdmin] = useState(false);
+    const [isUserComum, setIsUserComum] = useState(false);
+    const [user, setUser] = useState<DecodedToken>();
 
     const getToken = () => {
         return localStorage.getItem('token');
@@ -39,7 +42,11 @@ export function Home() {
                 decodedToken.roles.forEach(role => {
                     if (role === 'ADMIN') {
                         setIsUserAdmin(true);
+                    } else if (role === 'COMUM') {
+                        setIsUserComum(true);
                     }
+                console.log('decodedToken:', decodedToken.sub);
+                setUser(decodedToken);
                 });                
             } catch (error) {
                 console.error('Erro ao decodificar o token:', error);
@@ -73,47 +80,70 @@ export function Home() {
                                     </ListItemButton>
                                     </ListItem>
                                     <ListItem >
-                                    <ListItemButton>
+                                    <ListItemButton onClick={() => navigate('/user-list')}>
                                         <ListItemIcon>
                                         <PersonSearchIcon />
                                         </ListItemIcon>
                                         <ListItemText primary="Listar Usuários" />
                                     </ListItemButton>
                                     </ListItem>
-                                    <ListItem >
+                                    {/* <ListItem >
                                     <ListItemButton>
                                         <ListItemIcon>
                                         <PersonIcon />
                                         </ListItemIcon>
                                         <ListItemText primary="Editar Usuários" />
                                     </ListItemButton>
+                                    </ListItem> */}
+                                </List>
+                                <List>    
+                                    <ListItem>
+                                    <ListItemButton onClick={() => navigate('/checkinout-list')}>
+                                        <ListItemIcon>
+                                        <FormatListBulletedIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Listar Pontos" />
+                                    </ListItemButton>
                                     </ListItem>
                                 </List>
                             </nav>
-                            <nav aria-label="secondary mailbox folders">
+                            {/* <nav aria-label="secondary mailbox folders">
                                 <List>    
                                     <ListItem>
-                                    <ListItemButton>
+                                    <ListItemButton onClick={() => navigate('/checkinout-list')}>
                                         <ListItemIcon>
-                                        <PersonAddAlt1Icon />
+                                        <FormatListBulletedIcon />
                                         </ListItemIcon>
-                                        <ListItemText primary="Criar Novos Usuários" />
+                                        <ListItemText primary="Listar Pontos" />
                                     </ListItemButton>
                                     </ListItem>
-                                    <ListItem >
-                                    <ListItemButton>
+                                </List>
+                            </nav> */}
+                        </Box>
+                    </Container>
+                    )}
+
+                    {isUserComum && (
+                        <Container component="main" maxWidth="md" style={{ marginTop: '55px', backgroundColor: '#cfcfcf', borderRadius: '10px', color:'#121214'}}>
+                        <Box display="flex" justifyContent="center">
+                            <nav aria-label="userslist">
+                                <List>
+                                    <ListItem>
+                                    <ListItemButton onClick={() => navigate('/register-in-out')}>
                                         <ListItemIcon>
-                                        <DraftsIcon />
+                                        <AccessAlarmsIcon />
                                         </ListItemIcon>
-                                        <ListItemText primary="Listar Usuários" />
+                                        <ListItemText primary="Bater Ponto" />
                                     </ListItemButton>
                                     </ListItem>
-                                    <ListItem >
-                                    <ListItemButton>
+                                </List>
+                                <List>
+                                    <ListItem>
+                                    <ListItemButton onClick={() => navigate(`/list-work-hours/${user?.sub}`)}>
                                         <ListItemIcon>
-                                        <DraftsIcon />
+                                        <FormatListBulletedIcon />
                                         </ListItemIcon>
-                                        <ListItemText primary="Editar Usuários" />
+                                        <ListItemText primary="Listar Pontos" />
                                     </ListItemButton>
                                     </ListItem>
                                 </List>
@@ -121,7 +151,6 @@ export function Home() {
                         </Box>
                     </Container>
                     )}
-                    <h1>Home</h1>
                 </>
             )}
         </div>

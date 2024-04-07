@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.gestaodepontos.gestao_de_pontos.modules.users.dto.UserDTO;
 import com.gestaodepontos.gestao_de_pontos.modules.users.entities.UserEntity;
 import com.gestaodepontos.gestao_de_pontos.modules.users.repositories.UserRepository;
 import com.gestaodepontos.gestao_de_pontos.modules.users.services.ListAllUserService;
@@ -41,7 +42,7 @@ public class ListAllUserServiceTest {
 
         when(userRepository.findAll()).thenReturn(Arrays.asList(user1, user2));
 
-        List<UserEntity> users = listAllUserService.getAllUsers();
+        List<UserDTO> users = listAllUserService.getAllUsers();
 
         assertEquals(2, users.size());
         assertEquals("user1", users.get(0).getUsername());

@@ -28,7 +28,6 @@ interface ErrorApi {
     message: string;
 }
 
-// Definindo esquema de validação com Zod
 const validationSchema = z.object({
     email: z.string().email(),
     name: z.string().min(3),

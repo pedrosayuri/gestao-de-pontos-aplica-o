@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gestaodepontos.gestao_de_pontos.infra.RestMessageDTO;
-import com.gestaodepontos.gestao_de_pontos.modules.users.entities.UserEntity;
+import com.gestaodepontos.gestao_de_pontos.modules.users.dto.UserDTO;
 import com.gestaodepontos.gestao_de_pontos.modules.users.services.ListAllUserService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +27,7 @@ public class ListAllUserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> getAllUsers(HttpServletRequest request) {
         try {
-            List<UserEntity> result = this.listAllUserService.getAllUsers();
+            List<UserDTO> result = this.listAllUserService.getAllUsers();
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             RestMessageDTO defaultErrorDTO = new RestMessageDTO(HttpStatus.BAD_REQUEST.value(), e.getMessage());

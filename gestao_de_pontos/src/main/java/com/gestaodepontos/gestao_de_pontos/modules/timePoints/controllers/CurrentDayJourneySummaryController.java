@@ -31,7 +31,7 @@ public class CurrentDayJourneySummaryController {
 
             var requestUserId = request.getAttribute("user_id");
 
-            if (requestUserId == null || !(requestUserId.toString().equals(userIdStr))) {
+            if (requestUserId == null || !(requestUserId.toString().equals(userIdStr)) && !request.isUserInRole("ADMIN")) {
                 RestMessageDTO defaultErrorDTO = new RestMessageDTO(HttpStatus.BAD_REQUEST.value(), "Você não tem essa permissão!");
                 return ResponseEntity.badRequest().body(defaultErrorDTO);
             }
