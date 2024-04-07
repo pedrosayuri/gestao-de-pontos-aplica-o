@@ -100,7 +100,6 @@ export function Register() {
                 workRegime
             });
         } catch (error) {
-            console.error('Erro de validação:', error.errors);
             setSnackbarMessage('Erro de validação. Por favor, verifique os dados informados.');
             setSnackbarOpen(true);
             return;
