@@ -4,6 +4,7 @@ import * as jwtDecode from 'jwt-decode';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { z } from "zod";
+import { CustomSnackbar } from "../components/BasicSnackbar";
 
 import * as React from 'react';
 import Box from '@mui/material/Box';
@@ -15,7 +16,8 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Snackbar from '@mui/material/Snackbar';
+import FormHelperText from '@mui/material/FormHelperText';
+import { SelectChangeEvent } from '@mui/material';
 import { Container, MenuItem, Select, Typography, Button } from "@mui/material";
 
 interface DecodedToken {
@@ -23,17 +25,21 @@ interface DecodedToken {
     roles: string[];
 }
 
-interface ErrorApi {
-    status: number;
-    message: string;
+interface ErrosValidacao {
+    email?: string;
+    name?: string;
+    password?: string;
+    userRole?: string;
+    workRegime?: string;
+    [key: string]: string | undefined;
 }
 
 const validationSchema = z.object({
-    email: z.string().email(),
-    name: z.string().min(3),
-    password: z.string().min(8),
-    userRole: z.string().nonempty(),
-    workRegime: z.string().nonempty()
+    email: z.string().email({ message: 'Insira um e-mail válido' }),
+    name: z.string().min(3, { message: 'O nome deve ter pelo menos 3 caracteres' }),
+    password: z.string().min(8, { message: 'A senha deve ter pelo menos 8 caracteres' }),
+    userRole: z.string().nonempty({ message: 'O campo de função do usuário não pode estar vazio' }),
+    workRegime: z.string().nonempty({ message: 'O campo de regime de trabalho não pode estar vazio' })
 });
 
 export function Register() {
@@ -51,11 +57,35 @@ export function Register() {
     const [password, setPassword] = React.useState("");
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [snackbarMessage, setSnackbarMessage] = React.useState("");
+    const [snackbarSeverity, setSnackbarSeverity] = React.useState<"success" | "error" | "warning" | "info">("error");
+    const [validationErrors, setValidationErrors] = React.useState<ErrosValidacao>({});
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
+    };
+
+    const handleInputChange = (setStateFunction: React.Dispatch<React.SetStateAction<string>>, field: string) => {
+        return (event: React.ChangeEvent<{ value: unknown }>) => {
+            setStateFunction(event.target.value as string);
+            setValidationErrors(prevErrors => {
+                const newErrors = { ...prevErrors };
+                delete newErrors[field];
+                return newErrors;
+            });
+        };
+    };
+
+    const handleSelectChange = (setStateFunction: React.Dispatch<React.SetStateAction<string>>, field: string) => {
+        return (event: SelectChangeEvent) => {
+            setStateFunction(event.target.value);
+            setValidationErrors(prevErrors => {
+                const newErrors = { ...prevErrors };
+                delete newErrors[field];
+                return newErrors;
+            });
+        };
     };
 
     const getToken = () => {
@@ -99,13 +129,22 @@ export function Register() {
                 workRegime
             });
         } catch (error) {
+            if (error instanceof z.ZodError) {
+                const fieldErrors: { [key: string]: string } = {};
+                error.errors.map(err => {
+                    fieldErrors[err.path[0]] = err.message;
+                });
+                setValidationErrors(fieldErrors);
+                return;
+            }
             setSnackbarMessage('Erro de validação. Por favor, verifique os dados informados.');
             setSnackbarOpen(true);
+            setSnackbarSeverity('error');
             return;
         }
-    
+
         try {
-            const response = await axios.post(`${apiUrl}/users/`, {
+            await axios.post(`${apiUrl}/users/`, {
                 email: email,
                 username: name,
                 password: password,
@@ -116,15 +155,14 @@ export function Register() {
                     Authorization: `Bearer ${getToken()}`
                 }
             });
-            console.log('Dados enviados com sucesso:', response.data);
+            setSnackbarOpen(true);
+            setSnackbarMessage('Usuário criado com sucesso!');
+            setSnackbarSeverity('success');
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                const errorResponse = error.response as { data: ErrorApi };
-                console.error('Erro ao enviar dados:', errorResponse.data);
-                console.log('Código de erro:', errorResponse.data.status);
-                console.log('Mensagem de erro:', errorResponse.data.message);
-                setSnackbarMessage(errorResponse.data.message);
                 setSnackbarOpen(true);
+                setSnackbarMessage('Não foi possível cadastrar esse usuário, por favor tente novamente!');
+                setSnackbarSeverity('error');
             }
         }
     };
@@ -150,7 +188,9 @@ export function Register() {
                                         sx={{ m: 1, width: '56ch' }}
                                         autoComplete="off"
                                         value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        onChange={handleInputChange(setEmail, "email")}
+                                        error={!!validationErrors["email"]}
+                                        helperText={validationErrors["email"]}
                                     />
                                     <TextField
                                         label="Nome"
@@ -159,9 +199,12 @@ export function Register() {
                                         sx={{ m: 1, width: '27ch' }}
                                         autoComplete="off"
                                         value={name}
-                                        onChange={(e) => setName(e.target.value)}
+                                        onChange={handleInputChange(setName, "name")}
+                                        error={!!validationErrors["name"]}
+                                        helperText={validationErrors["name"]}
                                     />
-                                    <FormControl sx={{ m: 1, width: '27ch' }} variant="outlined">
+
+                                    <FormControl sx={{ m: 1, width: '27ch' }} variant="outlined" error={!!validationErrors["password"]}>
                                         <InputLabel htmlFor="outlined-adornment-password">Senha</InputLabel>
                                         <OutlinedInput
                                             id="outlined-adornment-password"
@@ -181,8 +224,9 @@ export function Register() {
                                             label="Senha"
                                             autoComplete="new-password"
                                             value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
+                                            onChange={handleInputChange(setPassword, "password")}
                                         />
+                                        <FormHelperText>{validationErrors["password"]}</FormHelperText>
                                     </FormControl>
                                     <FormControl sx={{ m: 1, width: '27ch' }} variant="outlined">
                                         <InputLabel id="userRole-select-label">Papel do Usuário</InputLabel>
@@ -190,12 +234,14 @@ export function Register() {
                                             labelId="userRole-select-label"
                                             id="userRole-select"
                                             value={userRole}
-                                            onChange={(event) => setUserRole(event.target.value)}
+                                            onChange={handleSelectChange(setUserRole, "userRole")}
                                             label="Papel do Usuário"
+                                            error={!!validationErrors["userRole"]}
                                         >
                                             <MenuItem value={"ADMIN"}>Administrador</MenuItem>
                                             <MenuItem value={"COMUM"}>Colaborador</MenuItem>
                                         </Select>
+                                        <FormHelperText error>{validationErrors["userRole"]}</FormHelperText>
                                     </FormControl>
                                     <FormControl sx={{ m: 1, width: '27ch' }} variant="outlined">
                                         <InputLabel id="workRegime-select-label">Jornada de Trabalho</InputLabel>
@@ -203,30 +249,34 @@ export function Register() {
                                             labelId="workRegime-select-label"
                                             id="workRegime-select"
                                             value={workRegime}
-                                            onChange={(event) => setWorkRegime(event.target.value)}
+                                            onChange={handleSelectChange(setWorkRegime, "workRegime")}
                                             label="Papel do Usuário"
+                                            error={!!validationErrors["workRegime"]}
                                         >
                                             <MenuItem value={"SEIS_HORAS"}>6 Horas/Dia</MenuItem>
                                             <MenuItem value={"OITO_HORAS"}>8 Horas/Dia</MenuItem>
                                         </Select>
+                                        <FormHelperText error>{validationErrors["workRegime"]}</FormHelperText>
                                     </FormControl>
                                     <div style={{ textAlign: 'center', width: '100%', marginTop: '16px' }}>
                                         <Button variant="contained" onClick={handleSubmit} style={{ width: "97%" }}>Cadastrar</Button>
+                                    </div>
+                                    <div style={{ textAlign: 'center', width: '100%', marginTop: '16px' }}>
+                                        <Button variant="contained" color="error" onClick={() => navigate('/home')} style={{ width: "97%" }}>Voltar</Button>
                                     </div>
                                 </div>
                             </Box>
                         </Container>
                     )}
-                    <Snackbar
+                    <CustomSnackbar
                         open={snackbarOpen}
-                        autoHideDuration={6000}
-                        onClose={() => setSnackbarOpen(false)}
                         message={snackbarMessage}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                        severity={snackbarSeverity}
+                        onClose={setSnackbarOpen}
                     />
-                    <h1>Register</h1>
                 </>
             )}
+
         </div>
     );
 }
