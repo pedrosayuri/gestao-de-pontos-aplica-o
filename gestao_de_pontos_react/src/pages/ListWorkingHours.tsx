@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button, Container, Paper, Table, TableBody, TableCell, TableContainer, TableRow, TextField, TableHead, FormControl, Typography, Box } from "@mui/material";
 import { format, parse } from "date-fns";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { enCA } from "date-fns/locale";
 
 interface DecodedToken {
     name: string;
@@ -19,7 +20,7 @@ interface CheckInOutData {
 }
 
 interface WorkedHoursInADay {
-    workedHoursInADay: string;
+    workedHoursInADay: string | null;
 }
 
 interface ExtraTime {
@@ -36,10 +37,10 @@ export function ListWorkingHours() {
     const { id } = useParams();
 
     const [checkInOutData, setCheckInOutData] = useState<CheckInOutData[]>([]);
-    const [workedHoursInADay, setWorkedHoursInADay] = useState<WorkedHoursInADay[]>([]);
-    const [extraTime, setExtraTime] = useState<ExtraTime[]>([]);
+    const [workedHoursInADay, setWorkedHoursInADay] = useState<WorkedHoursInADay>();
+    const [extraTime, setExtraTime] = useState<ExtraTime>({ extraTime: '00:00' });
+    const [remainingTime, setRemainingTime] = useState<RemainingTime>({ remainingTime: '00:00' });
     const [isFullWorkDay, setIsFullWorkDay] = useState<boolean>(false);
-    const [remainingTime, setRemainingTime] = useState<RemainingTime[]>([]);
     const [tokenIsValid, setTokenIsValid] = useState(false);
     const [isUserAdmin, setIsUserAdmin] = useState(false);
     const [isUserComum, setIsUserComum] = useState(false);
@@ -154,12 +155,13 @@ export function ListWorkingHours() {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                            {checkInOutData.map((data) => (
-    <TableRow key={data.id}>
-        <TableCell align="center">{format(parse(data.timestamp, 'dd-MM-yyyy HH:mm', new Date()), 'dd/MM/yyyy \'às\' HH:mm:ss')}</TableCell>
-        <TableCell align="center">{data.reasons}</TableCell>
-    </TableRow>
-))}                            </TableBody>
+                                            {checkInOutData.length > 0 && checkInOutData.map((data) => (
+                                                <TableRow key={data.id}>
+                                                    <TableCell align="center">{format(parse(data.timestamp, 'dd-MM-yyyy HH:mm', new Date()), 'dd/MM/yyyy \'às\' HH:mm:ss')}</TableCell>
+                                                    <TableCell align="center">{data.reasons}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
                                         </Table>
                                         {isFullWorkDay && (
                                             <>
@@ -170,26 +172,26 @@ export function ListWorkingHours() {
                                                     </Typography>
                                                 </div>
                                                 <div style={{ textAlign: 'center', width: '100%', marginTop: '16px' }}>
-                                                    <Typography variant="h6" component="h2" gutterBottom style={{ color: 'black' }}>
-                                                        Horas trabalhadas {workedHoursInADay}
-                                                    </Typography>
+                                                <Typography variant="h6" component="h2" gutterBottom style={{ color: 'black' }}>
+                                                    Horas trabalhadas: {workedHoursInADay ? `${workedHoursInADay}` : 'N/A'}
+                                                </Typography>
                                                 </div>
                                             </>
                                         )}
-                                        {extraTime && extraTime !== '00:00' && (
+                                        {extraTime.extraTime !== '00:00' && extraTime && (
                                             <div style={{ textAlign: 'center', width: '100%', marginTop: '16px' }}>
                                                 <Typography variant="h6" component="h2" gutterBottom style={{ color: 'black' }}>
-                                                    Horas extras: {extraTime}
+                                                    Tempo Extra: {extraTime ? `${extraTime}` : 'N/A'}
                                                 </Typography>
                                             </div>
                                         )}
-                                        {remainingTime && (
-                                            <div style={{ textAlign: 'center', width: '100%', marginTop: '16px' }}>
+                                        {Array.isArray(remainingTime) && remainingTime.map((time, index) => (
+                                            <div key={index} style={{ textAlign: 'center', width: '100%', marginTop: '16px' }}>
                                                 <Typography variant="h6" component="h2" gutterBottom style={{ color: 'black' }}>
-                                                    Horas restantes: {remainingTime}
+                                                    Horas restantes: {time.remainingTime}
                                                 </Typography>
                                             </div>
-                                        )}
+                                        ))}
                                     </>
                                 ) : (
                                     <div style={{ textAlign: 'center', width: '100%', marginTop: '16px' }}>
