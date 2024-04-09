@@ -5,7 +5,8 @@
 - [Tecnologias Usadas](#tecnologias-usadas)
 - [Funcionalidades do Projeto](#funcionalidades-do-projeto)
 - [Execução do Projeto em um ambiente local](#execução-do-projeto-em-um-ambiente-local)
-- [Execução do Projeto em um ambiente produção](#execução-do-projeto-em-um-ambiente-producao)
+- [Execução do Projeto em um ambiente produção](#execução-do-Projeto-em-um-ambiente-produção)
+- [Diagrama de entidade/relacionamento (DER)](#Diagrama-de-entidade/relacionamento-(der))
 
 ## Desafios do Projeto
 
