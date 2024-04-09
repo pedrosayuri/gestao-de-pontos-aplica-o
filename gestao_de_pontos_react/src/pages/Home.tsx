@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Navbar } from "../components/Navbar";
 import * as jwtDecode from 'jwt-decode';
 import { useNavigate } from "react-router-dom";
+import { OptionsCard }from "../components/OptionsCard";
 
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
@@ -13,14 +14,13 @@ import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
-import { Container } from "@mui/material";
-
+import { Container, Grid } from "@mui/material";
 
 interface DecodedToken {
     name: string;
     roles: string[];
     sub: string;
-  }
+}
 
 export function Home() {
     const navigate = useNavigate();
@@ -45,9 +45,8 @@ export function Home() {
                     } else if (role === 'COMUM') {
                         setIsUserComum(true);
                     }
-                console.log('decodedToken:', decodedToken.sub);
-                setUser(decodedToken);
-                });                
+                    setUser(decodedToken);
+                });
             } catch (error) {
                 console.error('Erro ao decodificar o token:', error);
             }
@@ -67,89 +66,56 @@ export function Home() {
                 <>
                     <Navbar />
                     {isUserAdmin && (
-                    <Container component="main" maxWidth="md" style={{ marginTop: '55px', backgroundColor: '#cfcfcf', borderRadius: '10px', color:'#121214'}}>
-                        <Box display="flex" justifyContent="center">
-                            <nav aria-label="userslist">
-                                <List>
-                                    <ListItem>
-                                    <ListItemButton onClick={() => navigate('/register')}>
-                                        <ListItemIcon>
-                                        <PersonAddAlt1Icon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Criar Novos Usuários" />
-                                    </ListItemButton>
-                                    </ListItem>
-                                    <ListItem >
-                                    <ListItemButton onClick={() => navigate('/user-list')}>
-                                        <ListItemIcon>
-                                        <PersonSearchIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Listar Usuários" />
-                                    </ListItemButton>
-                                    </ListItem>
-                                    {/* <ListItem >
-                                    <ListItemButton>
-                                        <ListItemIcon>
-                                        <PersonIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Editar Usuários" />
-                                    </ListItemButton>
-                                    </ListItem> */}
-                                </List>
-                                <List>    
-                                    <ListItem>
-                                    <ListItemButton onClick={() => navigate('/checkinout-list')}>
-                                        <ListItemIcon>
-                                        <FormatListBulletedIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Listar Pontos" />
-                                    </ListItemButton>
-                                    </ListItem>
-                                </List>
-                            </nav>
-                            {/* <nav aria-label="secondary mailbox folders">
-                                <List>    
-                                    <ListItem>
-                                    <ListItemButton onClick={() => navigate('/checkinout-list')}>
-                                        <ListItemIcon>
-                                        <FormatListBulletedIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Listar Pontos" />
-                                    </ListItemButton>
-                                    </ListItem>
-                                </List>
-                            </nav> */}
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                width: '100%',
+                                marginTop: '100px',
+                            }}
+                        >
+                            <Grid container spacing={3} justifyContent="center">
+                                <Grid item xs={12} sm={6} md={4} lg={3}>
+                                    <OptionsCard icon={<PersonAddAlt1Icon sx={{ fontSize: 65 }} color="primary" />} text="Criar usuários" to="/register" />
+                                </Grid>
+                                <Grid item xs={12} sm={6} md={4} lg={3}>
+                                    <OptionsCard icon={<PersonSearchIcon sx={{ fontSize: 65 }} color="primary" />} text="Listar usuários" to="/user-list" />
+                                </Grid>
+                                <Grid item xs={12} sm={6} md={4} lg={3}>
+                                    <OptionsCard icon={<FormatListBulletedIcon sx={{ fontSize: 65 }} color="primary" />} text="Listar Pontos" to="/checkinout-list" />
+                                </Grid>
+                            </Grid>
                         </Box>
-                    </Container>
                     )}
 
                     {isUserComum && (
-                        <Container component="main" maxWidth="md" style={{ marginTop: '55px', backgroundColor: '#cfcfcf', borderRadius: '10px', color:'#121214'}}>
-                        <Box display="flex" justifyContent="center">
-                            <nav aria-label="userslist">
-                                <List>
-                                    <ListItem>
-                                    <ListItemButton onClick={() => navigate('/register-in-out')}>
-                                        <ListItemIcon>
-                                        <AccessAlarmsIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Bater Ponto" />
-                                    </ListItemButton>
-                                    </ListItem>
-                                </List>
-                                <List>
-                                    <ListItem>
-                                    <ListItemButton onClick={() => navigate(`/list-work-hours/${user?.sub}`)}>
-                                        <ListItemIcon>
-                                        <FormatListBulletedIcon />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Listar Pontos" />
-                                    </ListItemButton>
-                                    </ListItem>
-                                </List>
-                            </nav>
-                        </Box>
-                    </Container>
+                        <Container component="main" maxWidth="md" style={{ marginTop: '55px', backgroundColor: '#cfcfcf', borderRadius: '10px', color: '#121214' }}>
+                            <Box display="flex" justifyContent="center">
+                                <nav aria-label="userslist">
+                                    <List>
+                                        <ListItem>
+                                            <ListItemButton onClick={() => navigate('/register-in-out')}>
+                                                <ListItemIcon>
+                                                    <AccessAlarmsIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary="Bater Ponto" />
+                                            </ListItemButton>
+                                        </ListItem>
+                                    </List>
+                                    <List>
+                                        <ListItem>
+                                            <ListItemButton onClick={() => navigate(`/list-work-hours/${user?.sub}`)}>
+                                                <ListItemIcon>
+                                                    <FormatListBulletedIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary="Listar Pontos" />
+                                            </ListItemButton>
+                                        </ListItem>
+                                    </List>
+                                </nav>
+                            </Box>
+                        </Container>
                     )}
                 </>
             )}

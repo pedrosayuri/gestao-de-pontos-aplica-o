@@ -7,7 +7,6 @@ import { z } from "zod";
 import { CustomSnackbar } from "../components/BasicSnackbar";
 
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -17,7 +16,7 @@ import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import FormHelperText from '@mui/material/FormHelperText';
-import { SelectChangeEvent } from '@mui/material';
+import { Grid, SelectChangeEvent } from '@mui/material';
 import { Container, MenuItem, Select, Typography, Button } from "@mui/material";
 
 interface DecodedToken {
@@ -173,38 +172,41 @@ export function Register() {
                 <>
                     <Navbar />
                     {isUserAdmin && (
-                        <Container component="main" maxWidth="sm" style={{ marginTop: '55px', backgroundColor: '#cfcfcf', padding: '40px', borderRadius: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                                <div style={{ textAlign: 'center', width: '100%' }}>
+                        <Container component="main" maxWidth="sm" style={{ marginTop: '55px', backgroundColor: '#ffffff', padding: '40px', borderRadius: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '85' }}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} style={{ textAlign: 'center' }}>
                                     <Typography variant="h5" component="h2" gutterBottom style={{ color: 'black' }}>
                                         Cadastro de Usuário
                                     </Typography>
-                                </div>
-                                <div>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
                                     <TextField
                                         label="Email"
                                         id="outlined-basic"
                                         variant="outlined"
-                                        sx={{ m: 1, width: '56ch' }}
+                                        fullWidth
                                         autoComplete="off"
                                         value={email}
                                         onChange={handleInputChange(setEmail, "email")}
                                         error={!!validationErrors["email"]}
                                         helperText={validationErrors["email"]}
                                     />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
                                     <TextField
                                         label="Nome"
                                         id="outlined-basic"
                                         variant="outlined"
-                                        sx={{ m: 1, width: '27ch' }}
+                                        fullWidth
                                         autoComplete="off"
                                         value={name}
                                         onChange={handleInputChange(setName, "name")}
                                         error={!!validationErrors["name"]}
                                         helperText={validationErrors["name"]}
                                     />
-
-                                    <FormControl sx={{ m: 1, width: '27ch' }} variant="outlined" error={!!validationErrors["password"]}>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <FormControl sx={{ width: '100%' }} variant="outlined" error={!!validationErrors["password"]}>
                                         <InputLabel htmlFor="outlined-adornment-password">Senha</InputLabel>
                                         <OutlinedInput
                                             id="outlined-adornment-password"
@@ -223,12 +225,15 @@ export function Register() {
                                             }
                                             label="Senha"
                                             autoComplete="new-password"
+                                            fullWidth
                                             value={password}
                                             onChange={handleInputChange(setPassword, "password")}
                                         />
                                         <FormHelperText>{validationErrors["password"]}</FormHelperText>
                                     </FormControl>
-                                    <FormControl sx={{ m: 1, width: '27ch' }} variant="outlined">
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <FormControl sx={{ width: '100%' }} variant="outlined">
                                         <InputLabel id="userRole-select-label">Papel do Usuário</InputLabel>
                                         <Select
                                             labelId="userRole-select-label"
@@ -243,7 +248,9 @@ export function Register() {
                                         </Select>
                                         <FormHelperText error>{validationErrors["userRole"]}</FormHelperText>
                                     </FormControl>
-                                    <FormControl sx={{ m: 1, width: '27ch' }} variant="outlined">
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <FormControl sx={{ width: '100%' }} variant="outlined">
                                         <InputLabel id="workRegime-select-label">Jornada de Trabalho</InputLabel>
                                         <Select
                                             labelId="workRegime-select-label"
@@ -258,14 +265,14 @@ export function Register() {
                                         </Select>
                                         <FormHelperText error>{validationErrors["workRegime"]}</FormHelperText>
                                     </FormControl>
-                                    <div style={{ textAlign: 'center', width: '100%', marginTop: '16px' }}>
-                                        <Button variant="contained" onClick={handleSubmit} style={{ width: "97%" }}>Cadastrar</Button>
-                                    </div>
-                                    <div style={{ textAlign: 'center', width: '100%', marginTop: '16px' }}>
-                                        <Button variant="contained" color="error" onClick={() => navigate('/home')} style={{ width: "97%" }}>Voltar</Button>
-                                    </div>
-                                </div>
-                            </Box>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button variant="contained" onClick={handleSubmit} fullWidth>Cadastrar</Button>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button variant="contained" color="error" onClick={() => navigate('/home')} fullWidth>Voltar</Button>
+                                </Grid>
+                            </Grid>
                         </Container>
                     )}
                     <CustomSnackbar
