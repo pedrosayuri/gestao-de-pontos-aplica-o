@@ -95,8 +95,7 @@ export function ListWorkingHours() {
             setIsFullWorkDay(data.fullWorkDay);
             setRemainingTime(data.remainingTime);
         } catch (error) {
-            console.error('Erro ao buscar dados:', error);
-            setErrorMessage("Erro ao buscar dados. Tente novamente mais tarde.");
+            setErrorMessage("Não foi encontrado nenhum dado.");
         }
     }
 
