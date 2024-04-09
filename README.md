@@ -6,7 +6,7 @@
 - [Funcionalidades do Projeto](#funcionalidades-do-projeto)
 - [Execução do Projeto em um ambiente local](#execução-do-projeto-em-um-ambiente-local)
 - [Execução do Projeto em um ambiente produção](#execução-do-Projeto-em-um-ambiente-produção)
-- [Diagrama de entidade/relacionamento (DER)](#Diagrama-de-entidade/relacionamento-(der))
+- [Diagrama de entidade e relacionamento](#diagrama-de-entidade-e-relacionamento)
 
 ## Desafios do Projeto
 
@@ -129,6 +129,6 @@
 
      - O projeto de Frontend está hospedado na plataforma Vercel, enquanto o banco de dados e o projeto Backend estão hospedados na plataforma Render. Para acessar o sistema, basta visitar o seguinte link: https://pontofacil.vercel.app
 
-## Diagrama de entidade/relacionamento (DER)
+## Diagrama de entidade e relacionamento
 
 ![Diagrama de entidade/relacionamento](https://github.com/pedrosayuri/gestao-de-pontos-aplica-o/blob/main/Producao_DER.png)
