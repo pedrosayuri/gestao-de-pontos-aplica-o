@@ -7,9 +7,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
-      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
-      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dpg-coakid779t8c73ek3q70-a.oregon-postgres.render.com:5432/gestaodepontosdb_qvsb
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=XSbL4GYYfo5STi7LGl3HNWeKFMZnX86b
     networks:
       - app-network
     depends_on:
@@ -21,9 +21,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRESQL_USERNAME=${POSTGRESQL_USERNAME}
-      - POSTGRESQL_PASSWORD=${POSTGRESQL_PASSWORD}
-      - POSTGRESQL_DATABASE=${POSTGRESQL_DATABASE}
+      - POSTGRESQL_USERNAME=admin
+      - POSTGRESQL_PASSWORD=XSbL4GYYfo5STi7LGl3HNWeKFMZnX86b
+      - POSTGRESQL_DATABASE=gestaodepontosdb_qvsb
     volumes:
       - database-data:/bitnami/postgresql
     networks:
