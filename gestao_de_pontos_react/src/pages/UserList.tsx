@@ -12,7 +12,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Container, Typography } from "@mui/material";
+import { Container, Typography, Select, MenuItem, FormControl, InputLabel, SelectChangeEvent, Grid, Button } from "@mui/material";
 
 interface DecodedToken {
     name: string;
@@ -35,6 +35,7 @@ export function UserList() {
     const [users, setUsers] = useState<User[]>([]);
     const [tokenIsValid, setTokenIsValid] = useState(false);
     const [isUserAdmin, setIsUserAdmin] = useState(false);
+    const [filterUserRole, setFilterUserRole] = useState<string>('');
 
     const getToken = () => {
         return localStorage.getItem('token');
@@ -87,53 +88,77 @@ export function UserList() {
         decodeToken();
     }, []);
 
+    const handleFilterChange = (event: SelectChangeEvent<string>) => {
+        setFilterUserRole(event.target.value);
+    };
+
+    const filteredUsers = filterUserRole ? users.filter(user => user.userRole === filterUserRole) : users;
+
     return (
         <div>
             {tokenIsValid && (
                 <>
                     <Navbar />
                     {isUserAdmin && (
-                        <Container component="main" maxWidth="lg" style={{ marginTop: '55px', borderRadius: '10px', color:'#121214' }}>
+                        <Container component="main" maxWidth="lg" style={{ marginTop: '55px', marginBottom: '55px', borderRadius: '10px', color:'#121214' }}>
                             <TableContainer component={Paper}>
-                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                                <TableHead>
-                                    <TableRow>
-                                    <TableCell align="center">Email</TableCell>
-                                    <TableCell align="center">Nome</TableCell>
-                                    <TableCell align="center">Jornada de Trabalho</TableCell>
-                                    <TableCell align="center">Tipo de Usuário</TableCell>
-                                    <TableCell align="center">Criado em</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {users.map((user) => (
-                                    <TableRow
-                                        key={user.email}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell component="th" scope="row" align="center">{user.email}</TableCell>
-                                        <TableCell align="center">{user.username}</TableCell>
-                                        <TableCell align="center">
-                                            {user.workRegime === 'OITO_HORAS' ? '8 Horas/Dia' : 
-                                            (user.workRegime === 'SEIS_HORAS' ? '6 Horas/Dia' : user.workRegime)}
-                                        </TableCell>
-                                        <TableCell align="center">{user.userRole}</TableCell>
-                                        <TableCell align="center">
-                                        {format(new Date(user.createdAt).setHours(new Date(user.createdAt).getHours() - 3), 'dd/MM/yyyy \'às\' HH:mm:ss')}
-                                        </TableCell>
-                                    </TableRow>
-                                    ))}
-                                </TableBody>
-                                </Table>
                                 <div style={{ textAlign: 'center', width: '100%', marginTop: '16px' }}>
                                     <Typography variant="h6" component="h2" gutterBottom style={{ color: 'black' }}>
-                                        Total de usuários: {users.length}
+                                        Listagem de Usuários - Total: {filteredUsers.length}
                                     </Typography>
+                                    
+                                    <Grid item xs={12}>
+                                        <FormControl style={{ width: '60%' }} variant="outlined">
+                                            <InputLabel id="filterUserRole-label">Filtrar por Tipo de Usuário</InputLabel>
+                                            <Select
+                                                labelId="filterUserRole-label"
+                                                id="filterUserRole"
+                                                value={filterUserRole}
+                                                onChange={handleFilterChange}
+                                            >
+                                                <MenuItem value="">Todos</MenuItem>
+                                                <MenuItem value="ADMIN">Usuário Admin</MenuItem>
+                                                <MenuItem value="COMUM">Usuário Comum</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
                                 </div>
+                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                    <TableHead>
+                                        <TableRow>
+                                        <TableCell align="center">Email</TableCell>
+                                        <TableCell align="center">Nome</TableCell>
+                                        <TableCell align="center">Jornada de Trabalho</TableCell>
+                                        <TableCell align="center">Tipo de Usuário</TableCell>
+                                        <TableCell align="center">Criado em</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {filteredUsers.map((user) => (
+                                        <TableRow
+                                            key={user.email}
+                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        >
+                                            <TableCell component="th" scope="row" align="center">{user.email}</TableCell>
+                                            <TableCell align="center">{user.username}</TableCell>
+                                            <TableCell align="center">
+                                                {user.workRegime === 'OITO_HORAS' ? '8 Horas/Dia' : 
+                                                (user.workRegime === 'SEIS_HORAS' ? '6 Horas/Dia' : user.workRegime)}
+                                            </TableCell>
+                                            <TableCell align="center">{user.userRole}</TableCell>
+                                            <TableCell align="center">
+                                            {format(new Date(user.createdAt).setHours(new Date(user.createdAt).getHours() - 3), 'dd/MM/yyyy \'às\' HH:mm:ss')}
+                                            </TableCell>
+                                        </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                                <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <Button variant="contained" color="error" size="large" onClick={() => navigate('/home')} style={{ width: '45%', marginTop: '15px', marginBottom: '25px' }} >Voltar</Button>
+                                </Grid>
                             </TableContainer>
                         </Container>    
                     )}
-                    <h1>UserList</h1>
                 </>
             )}
         </div>

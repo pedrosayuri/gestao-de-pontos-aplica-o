@@ -172,7 +172,7 @@ export function Register() {
                 <>
                     <Navbar />
                     {isUserAdmin && (
-                        <Container component="main" maxWidth="sm" style={{ marginTop: '55px', backgroundColor: '#ffffff', padding: '40px', borderRadius: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '85' }}>
+                        <Container component="main" maxWidth="sm" style={{ marginTop: '55px', backgroundColor: '#ffffff', padding: '40px', borderRadius: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '85%' }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} style={{ textAlign: 'center' }}>
                                     <Typography variant="h5" component="h2" gutterBottom style={{ color: 'black' }}>
