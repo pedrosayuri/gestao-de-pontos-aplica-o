@@ -53,7 +53,7 @@
 
 - [x] Se possível, disponibilize o sistema desenvolvido em algum serviço cloud e que esteja acessível para avaliação prévia;
 
-- [ ] Junto às documentações, apresente diagrama de entidade/relacionamento (DER) que reflete a arquitetura de dados aplicada na solução;
+- [x] Junto às documentações, apresente diagrama de entidade/relacionamento (DER) que reflete a arquitetura de dados aplicada na solução;
 
 
 ## Tecnologias Usadas
@@ -127,3 +127,7 @@
 ## Execução do Projeto em um ambiente produção
 
      - O projeto de Frontend está hospedado na plataforma Vercel, enquanto o banco de dados e o projeto Backend estão hospedados na plataforma Render. Para acessar o sistema, basta visitar o seguinte link: https://pontofacil.vercel.app
+
+## Diagrama de entidade/relacionamento (DER)
+
+     ![Diagrama de entidade/relacionamento](https://github.com/pedrosayuri/gestao-de-pontos-aplica-o/blob/main/Producao_DER.png)
