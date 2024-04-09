@@ -12,13 +12,13 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.token.TokenService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.gestaodepontos.gestao_de_pontos.exceptions.CustomException;
-import com.gestaodepontos.gestao_de_pontos.modules.login.dto.AuthUserDTO;
+// import com.gestaodepontos.gestao_de_pontos.exceptions.CustomException;
+// import com.gestaodepontos.gestao_de_pontos.modules.login.dto.AuthUserDTO;
 import com.gestaodepontos.gestao_de_pontos.modules.login.services.LoginService;
-import com.gestaodepontos.gestao_de_pontos.modules.users.entities.UserEntity;
+// import com.gestaodepontos.gestao_de_pontos.modules.users.entities.UserEntity;
 import com.gestaodepontos.gestao_de_pontos.modules.users.repositories.UserRepository;
 
-import java.util.Optional;
+// import java.util.Optional;
 
 public class LoginServiceTest {
 
