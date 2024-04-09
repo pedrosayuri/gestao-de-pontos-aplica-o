@@ -5,25 +5,20 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { z } from "zod";
 
-import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import Snackbar from '@mui/material/Snackbar';
-import { Container, Typography, Button } from "@mui/material";
+import { Container, Button, Grid, FormHelperText } from "@mui/material";
 import { format } from "date-fns";
+import { CustomSnackbar } from "../components/BasicSnackbar";
+import React from "react";
 
 interface DecodedToken {
     name: string;
     roles: string[];
 }
 
-interface ErrorApi {
-    status: number;
-    message: string;
-}
-
 const validationSchema = z.object({
-    reasons: z.string(),
-    timestamp: z.string(),
+    reasons: z.string().min(1, { message: 'Insira o motivo do ponto' }),
+    timestamp: z.string().nonempty({ message: 'A data é obrigatória' }),
 });
 
 export function RegisterCheckInOut() {
@@ -34,9 +29,10 @@ export function RegisterCheckInOut() {
     const [isUserComum, setIsUserComum] = useState(false);
 
     const [reasons, setReasons] = useState("");
-    const [timestamp, setTimestamp] = useState(format(new Date(), 'dd-MM-yyyy HH:mm'));
+    const [timestamp, setTimestamp] = useState(format(new Date(), 'MM-dd-yyyy HH:mm'));
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarSeverity, setSnackbarSeverity] = React.useState<"success" | "error" | "warning" | "info">("error");
 
     const getToken = () => {
         return localStorage.getItem('token');
@@ -57,7 +53,9 @@ export function RegisterCheckInOut() {
                     }
                 });
             } catch (error) {
-                console.error('Erro ao decodificar o token:', error);
+                setSnackbarOpen(true);
+                setSnackbarSeverity('error');
+                setSnackbarMessage('Erro ao decodificar o token.');
             }
         } else {
             setTokenIsValid(false);
@@ -82,15 +80,14 @@ export function RegisterCheckInOut() {
         } catch (error) {
             setSnackbarMessage('Erro de validação. Por favor, verifique os dados informados.');
             setSnackbarOpen(true);
+            setSnackbarSeverity('error');
             return;
         }
     
         try {
-            console.log('Enviando dados:', { reasons, timestamp });
-            console.log('Token:', getToken());
             const timestampFormatted = format(timestamp, 'dd-MM-yyyy HH:mm');
 
-            const response = await axios.post(`${apiUrl}/time-points/`, {
+            await axios.post(`${apiUrl}/time-points/`, {
                 reasons: reasons,
                 timestamp: timestampFormatted,
             }, {
@@ -98,16 +95,13 @@ export function RegisterCheckInOut() {
                     Authorization: `Bearer ${getToken()}`
                 }
             });
-            console.log('Dados enviados com sucesso:', response.data);
+            setSnackbarSeverity('success');
             setSnackbarMessage('Dados enviados com sucesso.');
             setSnackbarOpen(true);
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                const errorResponse = error.response as { data: ErrorApi };
-                console.error('Erro ao enviar dados:', errorResponse.data);
-                console.log('Código de erro:', errorResponse.data.status);
-                console.log('Mensagem de erro:', errorResponse.data.message);
-                setSnackbarMessage(errorResponse.data.message);
+                setSnackbarSeverity('error');
+                setSnackbarMessage('Erro ao enviar os dados.');
                 setSnackbarOpen(true);
             }
         }
@@ -119,43 +113,43 @@ export function RegisterCheckInOut() {
                 <>
                     <Navbar />
                     {isUserComum && (
-                        <Container component="main" maxWidth="sm" style={{ marginTop: '55px', backgroundColor: '#cfcfcf', padding: '40px', borderRadius: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                                <div style={{ textAlign: 'center', width: '100%' }}>
-                                    <Typography variant="h5" component="h2" gutterBottom style={{ color: 'black' }}>
-                                        Cadastro de Pontos
-                                    </Typography>
-                                </div>
-                                <div>
+                        <Container component="main" maxWidth="md" style={{ marginTop: '55px', backgroundColor: '#ffffff', padding: '40px', borderRadius: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '85%' }}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
                                     <TextField
                                         label="Razões"
                                         variant="outlined"
-                                        sx={{ m: 1, width: '56ch' }}
+                                        fullWidth
                                         autoComplete="off"
                                         value={reasons}
                                         onChange={(e) => setReasons(e.target.value)}
                                     />
+                                    <FormHelperText>Insira o motivo do ponto</FormHelperText>
+                                </Grid>
+                                <Grid item xs={12}>
                                     <TextField
                                         label="Data e Hora"
                                         variant="outlined"
                                         type="datetime-local"
-                                        sx={{ m: 1, width: '56ch' }}
+                                        fullWidth
                                         value={timestamp}
                                         onChange={(e) => setTimestamp(e.target.value)}
                                     />
-                                    <div style={{ textAlign: 'center', width: '100%', marginTop: '16px' }}>
-                                        <Button variant="contained" onClick={handleSubmit} style={{ width: "97%" }}>Cadastrar</Button>
-                                    </div>
-                                </div>
-                            </Box>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button variant="contained" onClick={handleSubmit} fullWidth>Cadastrar</Button>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button variant="contained" color="error" onClick={() => navigate('/home')} fullWidth>Voltar</Button>
+                                </Grid>
+                            </Grid>
                         </Container>
                     )}
-                    <Snackbar
+                    <CustomSnackbar
                         open={snackbarOpen}
-                        autoHideDuration={6000}
-                        onClose={() => setSnackbarOpen(false)}
                         message={snackbarMessage}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                        severity={snackbarSeverity}
+                        onClose={setSnackbarOpen}
                     />
                 </>
             )}

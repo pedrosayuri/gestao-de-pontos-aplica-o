@@ -75,6 +75,9 @@ export function UserList() {
             });
             if (response.ok) {
                 const data = await response.json();
+                if (data.length === 0) {
+                    console.log('Nenhum usuário encontrado.');
+                }
                 setUsers(data);
             } else {
                 console.error('Erro ao buscar os usuários:', response.statusText);
@@ -84,15 +87,15 @@ export function UserList() {
         }
     }
 
-    useEffect(() => {
-        decodeToken();
-    }, []);
+    const filteredUsers = filterUserRole ? users.filter(user => user.userRole === filterUserRole) : users;
 
     const handleFilterChange = (event: SelectChangeEvent<string>) => {
         setFilterUserRole(event.target.value);
     };
 
-    const filteredUsers = filterUserRole ? users.filter(user => user.userRole === filterUserRole) : users;
+    useEffect(() => {
+        decodeToken();
+    }, []);
 
     return (
         <div>
@@ -134,6 +137,11 @@ export function UserList() {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
+                                        {filteredUsers.length === 0 && (
+                                            <TableRow>
+                                                <TableCell colSpan={5} align="center">Nenhum usuário encontrado.</TableCell>
+                                            </TableRow>
+                                        )}
                                         {filteredUsers.map((user) => (
                                         <TableRow
                                             key={user.email}

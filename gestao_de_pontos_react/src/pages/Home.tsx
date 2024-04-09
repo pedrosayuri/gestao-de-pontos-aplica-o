@@ -5,16 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { OptionsCard }from "../components/OptionsCard";
 
 import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
-import { Container, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 
 interface DecodedToken {
     name: string;
@@ -90,32 +85,24 @@ export function Home() {
                     )}
 
                     {isUserComum && (
-                        <Container component="main" maxWidth="md" style={{ marginTop: '55px', backgroundColor: '#cfcfcf', borderRadius: '10px', color: '#121214' }}>
-                            <Box display="flex" justifyContent="center">
-                                <nav aria-label="userslist">
-                                    <List>
-                                        <ListItem>
-                                            <ListItemButton onClick={() => navigate('/register-in-out')}>
-                                                <ListItemIcon>
-                                                    <AccessAlarmsIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Bater Ponto" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                    </List>
-                                    <List>
-                                        <ListItem>
-                                            <ListItemButton onClick={() => navigate(`/list-work-hours/${user?.sub}`)}>
-                                                <ListItemIcon>
-                                                    <FormatListBulletedIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="Listar Pontos" />
-                                            </ListItemButton>
-                                        </ListItem>
-                                    </List>
-                                </nav>
-                            </Box>
-                        </Container>
+                        <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: '100%',
+                            marginTop: '100px',
+                        }}
+                        >
+                            <Grid container spacing={3} justifyContent="center">
+                                <Grid item xs={12} sm={6} md={4} lg={3}>
+                                    <OptionsCard icon={<AccessAlarmsIcon sx={{ fontSize: 65 }} color="primary" />} text="Bater Ponto" to="/register-in-out" />
+                                </Grid>
+                                <Grid item xs={12} sm={6} md={4} lg={3}>
+                                <OptionsCard icon={<FormatListBulletedIcon sx={{ fontSize: 65 }} color="primary" />} text="Listar Pontos" to={`/list-work-hours/${user?.sub}`} />
+                                </Grid>
+                            </Grid>
+                        </Box>
                     )}
                 </>
             )}

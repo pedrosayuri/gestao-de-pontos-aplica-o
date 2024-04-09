@@ -14,7 +14,7 @@ import * as jwtDecode from 'jwt-decode';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const settings = ['Perfil', 'Sair'];
+const settings = ['Sair'];
 
 interface DecodedToken {
   name: string;
@@ -68,7 +68,7 @@ export function Navbar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AccessAlarmsIcon 
-            sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} 
+            sx={{ display: { xs: 'none', md: 'flex', cursor: 'pointer' }, mr: 1 }}  
             onClick={() => navigate('/home')}
           />
           <Typography
@@ -83,6 +83,7 @@ export function Navbar() {
               letterSpacing: '.3rem',
               color: 'inherit',
               textDecoration: 'none',
+              cursor: 'pointer'
             }}
             onClick={() => navigate('/home')}
           >
