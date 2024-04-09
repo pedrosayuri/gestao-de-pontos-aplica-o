@@ -6,7 +6,7 @@
 - [Funcionalidades do Projeto](#funcionalidades-do-projeto)
 - [Execução do Projeto em um ambiente local](#execução-do-projeto-em-um-ambiente-local)
 - [Execução do Projeto em um ambiente produção](#execução-do-Projeto-em-um-ambiente-produção)
-- [Diagrama de entidade e relacionamento](#diagrama-de-entidade-e-relacionamento)
+- [Diagrama de entidade e relacionamento](#diagrama-de-entidade-erelacionamento)
 
 ## Desafios do Projeto
 
@@ -128,6 +128,10 @@
 ## Execução do Projeto em um ambiente produção
 
      - O projeto de Frontend está hospedado na plataforma Vercel, enquanto o banco de dados e o projeto Backend estão hospedados na plataforma Render. Para acessar o sistema, basta visitar o seguinte link: https://pontofacil.vercel.app
+
+     - Por favor, tenha em mente que, devido ao fato de o projeto estar hospedado em sistemas gratuitos (Vercel - Frontend e Render - Backend), pode haver um atraso na utilização do site. Especificamente, a primeira solicitação de login pode demorar alguns minutos, pois o Render monitora a atividade do backend. Se o backend não receber consultas por um período, ele entra em um estado de suspensão. Assim, quando a primeira consulta é feita, o Render precisa reativar o projeto e reconstruí-lo, o que pode resultar em um atraso até que o processo seja concluído.
+
+     - Portanto, peço gentilmente que aguarde até que a operação seja concluída. Durante esse tempo de espera, você pode explorar a documentação Swagger do projeto em https://gestao-de-pontos-aplicacao.onrender.com/swagger-ui/index.html
 
 ## Diagrama de entidade e relacionamento
 
