@@ -130,4 +130,4 @@
 
 ## Diagrama de entidade/relacionamento (DER)
 
-     ![Diagrama de entidade/relacionamento](https://github.com/pedrosayuri/gestao-de-pontos-aplica-o/blob/main/Producao_DER.png)
+![Diagrama de entidade/relacionamento](https://github.com/pedrosayuri/gestao-de-pontos-aplica-o/blob/main/Producao_DER.png)
