@@ -67,6 +67,8 @@
           - [Spring Boot](https://spring.io/projects/spring-boot) - Versão
 
      - Ferramentas de Desenvolvimento:
+          - [Docker](https://www.docker.com/)
+          - [Docker Compose](https://docs.docker.com/compose/)
           - [Maven](https://maven.apache.org/)
           - [Vite](https://pt.vitejs.dev/guide/)
           - [React](https://react.dev/)
