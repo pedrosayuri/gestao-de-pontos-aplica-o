@@ -1,17 +1,22 @@
 package com.gestaodepontos.gestao_de_pontos.modules.users.entities;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
 
+import com.gestaodepontos.gestao_de_pontos.modules.timePoints.entities.TimePointsEntity;
 import com.gestaodepontos.gestao_de_pontos.modules.users.enums.UserRegime;
 import com.gestaodepontos.gestao_de_pontos.modules.users.enums.UserType;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -49,7 +54,10 @@ public class UserEntity {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @CreationTimestamp
+    @UpdateTimestamp
     private LocalDateTime modifiedAt;
+
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TimePointsEntity> timePoints;
 
 }

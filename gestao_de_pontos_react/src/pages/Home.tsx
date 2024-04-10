@@ -75,10 +75,10 @@ export function Home() {
                                     <OptionsCard icon={<PersonAddAlt1Icon sx={{ fontSize: 65 }} color="primary" />} text="Criar usuários" to="/register" />
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={4} lg={3}>
-                                    <OptionsCard icon={<PersonSearchIcon sx={{ fontSize: 65 }} color="primary" />} text="Listar usuários" to="/user-list" />
+                                    <OptionsCard icon={<PersonSearchIcon sx={{ fontSize: 65 }} color="primary" />} text="Listar usuários" to="/user" />
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={4} lg={3}>
-                                    <OptionsCard icon={<FormatListBulletedIcon sx={{ fontSize: 65 }} color="primary" />} text="Listar Pontos" to="/checkinout-list" />
+                                    <OptionsCard icon={<FormatListBulletedIcon sx={{ fontSize: 65 }} color="primary" />} text="Listar Pontos" to="/checkinout" />
                                 </Grid>
                             </Grid>
                         </Box>
@@ -96,10 +96,10 @@ export function Home() {
                         >
                             <Grid container spacing={3} justifyContent="center">
                                 <Grid item xs={12} sm={6} md={4} lg={3}>
-                                    <OptionsCard icon={<AccessAlarmsIcon sx={{ fontSize: 65 }} color="primary" />} text="Bater Ponto" to="/register-in-out" />
+                                    <OptionsCard icon={<AccessAlarmsIcon sx={{ fontSize: 65 }} color="primary" />} text="Bater Ponto" to="/registerinout" />
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={4} lg={3}>
-                                <OptionsCard icon={<FormatListBulletedIcon sx={{ fontSize: 65 }} color="primary" />} text="Listar Pontos" to={`/list-work-hours/${user?.sub}`} />
+                                <OptionsCard icon={<FormatListBulletedIcon sx={{ fontSize: 65 }} color="primary" />} text="Listar Pontos" to={`/workhours/${user?.sub}`} />
                                 </Grid>
                             </Grid>
                         </Box>

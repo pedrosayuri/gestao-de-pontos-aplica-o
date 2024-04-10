@@ -203,7 +203,7 @@ export function ListWorkingHours() {
                                             if (isUserComum) {
                                                 navigate("/home");
                                             } else {
-                                                navigate("/checkinout-list");
+                                                navigate("/checkinout");
                                             }
                                         }}
                                     >

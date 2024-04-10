@@ -40,6 +40,21 @@ public class UpdateUserService {
             updated = true;
         }
 
+        if (updatedUser.getUsername() != null) {
+            user.setUsername(updatedUser.getUsername());
+            updated = true;
+        }
+
+        if (updatedUser.getUserRole() != null) {
+            user.setUserRole(updatedUser.getUserRole());
+            updated = true;
+        }
+
+        if (updatedUser.getWorkRegime() != null) {
+            user.setWorkRegime(updatedUser.getWorkRegime());
+            updated = true;
+        }
+
         if (updated) {
             user.setModifiedAt(LocalDateTime.now());
         } else {

@@ -29,14 +29,14 @@ public class UpdateUserController {
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable("id") Long id, @Valid @RequestBody UserEntity userEntity, HttpServletRequest request) {
         try {
-            String userID = (String) request.getAttribute("user_id");
-            if (userID == null || id == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RestMessageDTO(HttpStatus.UNAUTHORIZED.value(), "Usuário não autenticado"));
-            }
+            // String userID = (String) request.getAttribute("user_id");
+            // if (userID == null || id == null) {
+            //     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RestMessageDTO(HttpStatus.UNAUTHORIZED.value(), "Usuário não autenticado"));
+            // }
 
-            if (!userID.equals(String.valueOf(id))) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RestMessageDTO(HttpStatus.FORBIDDEN.value(), "Você não tem essa permissão"));
-            }
+            // if (!userID.equals(String.valueOf(id))) {
+            //     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RestMessageDTO(HttpStatus.FORBIDDEN.value(), "Você não tem essa permissão"));
+            // }
 
             var result =  this.updateUserService.update(id, userEntity);
             return ResponseEntity.ok().body(result);

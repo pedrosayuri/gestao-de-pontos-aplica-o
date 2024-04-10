@@ -151,7 +151,7 @@ export function CheckInOutList() {
                                                     (user.workRegime === 'SEIS_HORAS' ? '6 Horas/Dia' : user.workRegime)}
                                                 </TableCell>
                                                 <TableCell align="center">
-                                                    <Button variant="contained" onClick={() => navigate(`/list-work-hours/${user.id}`)}>Ver Pontos</Button>
+                                                    <Button variant="contained" onClick={() => navigate(`/workhours/${user.id}`)}>Ver Pontos</Button>
                                                 </TableCell>
                                             </TableRow>
                                         ))}

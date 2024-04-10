@@ -24,13 +24,7 @@ public class ListUserController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getUserById(@PathVariable("id") Long id, HttpServletRequest request) {
         try {
-            var userID = request.getAttribute("user_id").toString();
-
-            if (!userID.equals(id.toString())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RestMessageDTO(HttpStatus.FORBIDDEN.value(), "Você não tem essa permissão"));
-            }
-
-            var result =  this.listUserService.getUserById(id);
+            var result = this.listUserService.getUserById(id);
             return ResponseEntity.ok().body(result);
         } catch (MessageException e) {
             return ResponseEntity.notFound().build();

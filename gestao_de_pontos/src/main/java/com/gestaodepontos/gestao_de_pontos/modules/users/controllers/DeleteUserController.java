@@ -26,13 +26,6 @@ public class DeleteUserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> delete(@PathVariable("id") Long id, HttpServletRequest request) {
         try {
-            String userID = (String) request.getAttribute("user_id");
-            String idString = id.toString();
-
-            if (!userID.equals(idString)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new RestMessageDTO(HttpStatus.FORBIDDEN.value(), "Você não tem essa permissão"));
-            }
-
             this.deleteUserService.delete(id);
             return ResponseEntity.ok().build();
         } catch (MessageException e) {
@@ -42,5 +35,4 @@ public class DeleteUserController {
             return ResponseEntity.badRequest().body(defaultErrorDTO);
         }
     }
-
 }
