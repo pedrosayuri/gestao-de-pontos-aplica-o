@@ -139,7 +139,7 @@ export function CheckInOutList() {
                                         {filteredUsers.length === 0 && (
                                             <TableRow>
                                                 <TableCell colSpan={5} align="center">
-                                                    {!loading ? <CircularProgress size={32} color="info" /> : 'Nenhum usuário encontrado.'}
+                                                    {loading ? <CircularProgress size={32} color="info" /> : 'Nenhum usuário encontrado.'}
                                                 </TableCell>
                                             </TableRow>
                                         )}
