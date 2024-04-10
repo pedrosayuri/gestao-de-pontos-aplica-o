@@ -67,7 +67,7 @@ export function Home() {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 width: '100%',
-                                marginTop: '100px',
+                                marginTop: '55px',
                             }}
                         >
                             <Grid container spacing={3} justifyContent="center">
@@ -91,7 +91,7 @@ export function Home() {
                             justifyContent: 'center',
                             alignItems: 'center',
                             width: '100%',
-                            marginTop: '100px',
+                            marginTop: '55px',
                         }}
                         >
                             <Grid container spacing={3} justifyContent="center">

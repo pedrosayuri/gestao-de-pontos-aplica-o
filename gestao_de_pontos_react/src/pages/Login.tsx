@@ -50,7 +50,7 @@ export function Login() {
 
     return (
         <div style={{ minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Container component="main" maxWidth="xs" style={{ backgroundColor: '#ffffff', padding: '40px', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(241, 0, 0, 0.1)' }}>
+            <Container component="main" maxWidth="sm" style={{ backgroundColor: '#ffffff', padding: '40px', borderRadius: '10px', justifyContent: 'center', alignItems: 'center', width: '85%' }}>
                 <Typography component="h1" variant="h4" align="center" style={{ marginBottom: '20px', color: '#1a1919', fontWeight: 'bold' }}>
                     <AccessAlarmsIcon style={{ marginRight: '10px' }} />
                     Ponto Fácil

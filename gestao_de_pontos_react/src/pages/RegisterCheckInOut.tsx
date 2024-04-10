@@ -5,11 +5,13 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { z } from "zod";
 
+import DateCalendarViews from "../components/DatePicker/DatePicker";
+import TimePicker from "../components/TimePicker/TimerPicker";
 import TextField from '@mui/material/TextField';
-import { Container, Button, Grid, FormHelperText } from "@mui/material";
-import { format } from "date-fns";
+import { Container, Button, Grid, FormHelperText, FormControl } from "@mui/material";
 import { CustomSnackbar } from "../components/BasicSnackbar";
 import React from "react";
+import { Dayjs } from "dayjs";
 
 interface DecodedToken {
     name: string;
@@ -29,7 +31,8 @@ export function RegisterCheckInOut() {
     const [isUserComum, setIsUserComum] = useState(false);
 
     const [reasons, setReasons] = useState("");
-    const [timestamp, setTimestamp] = useState(format(new Date(), 'MM-dd-yyyy HH:mm'));
+    const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
+    const [selectedTime, setSelectedTime] = useState<Dayjs | null>(null);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = React.useState<"success" | "error" | "warning" | "info">("error");
@@ -68,15 +71,31 @@ export function RegisterCheckInOut() {
     }, []);
 
     const handleSubmit = async () => {
-        if (!timestamp) {
-            const currentDateTime = format(new Date(), 'dd-MM-yyyy HH:mm');
-            setTimestamp(currentDateTime);
+        if (!selectedDate) {
+            setSnackbarMessage('Selecione uma data.');
+            setSnackbarOpen(true);
+            setSnackbarSeverity('error');
+            return;
         }
+
+        if (!selectedTime) {
+            setSnackbarMessage('Selecione um horário.');
+            setSnackbarOpen(true);
+            setSnackbarSeverity('error');
+            return;
+        }
+
+        if (!reasons) {
+            setSnackbarMessage('Insira o motivo do ponto.');
+            setSnackbarOpen(true);
+            setSnackbarSeverity('error');
+            return;
+        }
+
         try {
             validationSchema.parse({
                 reasons,
-                timestamp,
-            });
+                timestamp: selectedDate.format('YYYY-MM-DD') + ' ' + selectedTime.format('HH:mm'),});
         } catch (error) {
             setSnackbarMessage('Erro de validação. Por favor, verifique os dados informados.');
             setSnackbarOpen(true);
@@ -85,19 +104,25 @@ export function RegisterCheckInOut() {
         }
     
         try {
-            const timestampFormatted = format(timestamp, 'dd-MM-yyyy HH:mm');
+            if (selectedDate && selectedTime) {
+                const timestampFormatted = selectedDate.format('DD-MM-YYYY') + ' ' + selectedTime.format('HH:mm');
 
-            await axios.post(`${apiUrl}/time-points/`, {
-                reasons: reasons,
-                timestamp: timestampFormatted,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${getToken()}`
-                }
-            });
-            setSnackbarSeverity('success');
-            setSnackbarMessage('Dados enviados com sucesso.');
-            setSnackbarOpen(true);
+                await axios.post(`${apiUrl}/time-points/`, {
+                    reasons: reasons,
+                    timestamp: timestampFormatted,
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${getToken()}`
+                    }
+                });
+                setSnackbarSeverity('success');
+                setSnackbarMessage('Dados enviados com sucesso.');
+                setSnackbarOpen(true);
+            } else {
+                setSnackbarSeverity('error');
+                setSnackbarMessage('Erro ao enviar os dados.');
+                setSnackbarOpen(true);
+            }
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 setSnackbarSeverity('error');
@@ -126,15 +151,27 @@ export function RegisterCheckInOut() {
                                     />
                                     <FormHelperText>Insira o motivo do ponto</FormHelperText>
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        label="Data e Hora"
-                                        variant="outlined"
-                                        type="datetime-local"
-                                        fullWidth
-                                        value={timestamp}
-                                        onChange={(e) => setTimestamp(e.target.value)}
-                                    />
+                                <Grid container item xs={12} xl={6} justifyContent={"center"}>
+                                    <FormControl sx={{marginBottom: '25px', marginTop: '15px'}} variant="outlined">
+                                        <DateCalendarViews 
+                                            onChange={(date: Dayjs | null) => {
+                                                if (date) {
+                                                    setSelectedDate(date);
+                                                }
+                                            }}
+                                            value={null}
+                                        />
+                                    </FormControl>
+                                </Grid>
+                                <Grid container item xs={12} xl={6} justifyContent={"center"}>
+                                    <FormControl sx={{marginBottom: '25px', marginTop: '15px'}} variant="outlined">
+                                    <TimePicker 
+                                            onChange={(time: Dayjs | null) => {
+                                                setSelectedTime(time);
+                                            }}
+                                            value={selectedTime}
+                                        />
+                                    </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Button variant="contained" onClick={handleSubmit} fullWidth>Cadastrar</Button>

@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { Navbar } from "../components/Navbar";
 import * as jwtDecode from 'jwt-decode';
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Container, Paper, Table, TableBody, TableCell, TableContainer, TableRow, TextField, TableHead, FormControl, Typography } from "@mui/material";
+import { Button, Container, Paper, Table, TableBody, TableCell, TableContainer, TableRow, TableHead, FormControl, Typography } from "@mui/material";
 import { format } from "date-fns";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import DateCalendarViews from "../components/DatePicker/DatePicker";
+import { Dayjs } from "dayjs";
 
 interface DecodedToken {
     name: string;
@@ -88,7 +90,6 @@ export function ListWorkingHours() {
                 throw new Error("Failed to fetch data");
             }
             const data = await response.json();
-            console.log(data.timePointsEntities);
             setCheckInOutData(data.timePointsEntities);
             setWorkedHoursInADay(data.workedHoursInADay);
             setExtraTime(data.extraTime);
@@ -99,9 +100,11 @@ export function ListWorkingHours() {
         }
     }
 
-    const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedDate(event.target.value);
-    }
+    const handleDateChange = (date: Date | null) => {
+        if (date) {
+            setSelectedDate(format(date, 'yyyy-MM-dd'));
+        }
+    };
 
     const handleConfirmButtonClick = () => {
         if (!id) {
@@ -127,17 +130,14 @@ export function ListWorkingHours() {
                                     <Typography variant="h6" component="h2" gutterBottom style={{ color: 'black' }}>
                                         Listagem de Pontos
                                     </Typography>
-                                    
-                                    <FormControl sx={{ m: 3, width: '60%' }} variant="outlined">
-                                        <TextField
-                                        id="date"
-                                        label="Selecione uma data"
-                                        type="date"
-                                        defaultValue={selectedDate}
-                                        InputLabelProps={{
-                                            shrink: true,
-                                        }}
-                                        onChange={handleDateChange}
+                                    <FormControl sx={{marginBottom: '25px', marginTop: '15px'}} variant="outlined">
+                                        <DateCalendarViews 
+                                            onChange={(date: Dayjs | null) => {
+                                                if (date) {
+                                                    handleDateChange(date.toDate());
+                                                }
+                                            }}
+                                            value={null}
                                         />
                                     </FormControl>
                                     <Button variant="contained" color="success" onClick={handleConfirmButtonClick}>Confirmar</Button>
