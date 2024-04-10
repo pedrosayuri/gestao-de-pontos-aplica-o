@@ -9,7 +9,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
+import { Button, CircularProgress, Container, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
 
 interface DecodedToken {
     name: string;
@@ -34,6 +34,7 @@ export function CheckInOutList() {
     const [tokenIsValid, setTokenIsValid] = useState(false);
     const [isUserAdmin, setIsUserAdmin] = useState(false);
     const [filterWorkRegime, setFilterWorkRegime] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
     const getToken = () => {
         return localStorage.getItem('token');
@@ -65,6 +66,7 @@ export function CheckInOutList() {
 
     const getAllUsers = async () => {
         try {
+            setLoading(true);
             const response = await fetch(`${apiUrl}/users/`, {
                 method: 'GET',
                 headers: {
@@ -79,6 +81,8 @@ export function CheckInOutList() {
             }
         } catch (error) {
             console.error('Erro ao buscar os usuários:', error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -134,7 +138,9 @@ export function CheckInOutList() {
                                     <TableBody>
                                         {filteredUsers.length === 0 && (
                                             <TableRow>
-                                                <TableCell align="center" colSpan={3}>Nenhum usuário encontrado</TableCell>
+                                                <TableCell colSpan={5} align="center">
+                                                    {!loading ? <CircularProgress size={32} color="info" /> : 'Nenhum usuário encontrado.'}
+                                                </TableCell>
                                             </TableRow>
                                         )}
                                         {filteredUsers.map((user) => (

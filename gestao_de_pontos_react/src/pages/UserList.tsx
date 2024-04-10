@@ -12,7 +12,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Container, Typography, Select, MenuItem, FormControl, InputLabel, SelectChangeEvent, Grid, Button } from "@mui/material";
+import { Container, Typography, Select, MenuItem, FormControl, InputLabel, SelectChangeEvent, Grid, Button, CircularProgress } from "@mui/material";
 
 interface DecodedToken {
     name: string;
@@ -36,6 +36,7 @@ export function UserList() {
     const [tokenIsValid, setTokenIsValid] = useState(false);
     const [isUserAdmin, setIsUserAdmin] = useState(false);
     const [filterUserRole, setFilterUserRole] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
     const getToken = () => {
         return localStorage.getItem('token');
@@ -67,6 +68,7 @@ export function UserList() {
 
     const getAllUsers = async () => {
         try {
+            setLoading(true);
             const response = await fetch(`${apiUrl}/users/`, {
                 method: 'GET',
                 headers: {
@@ -84,6 +86,8 @@ export function UserList() {
             }
         } catch (error) {
             console.error('Erro ao buscar os usuários:', error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -139,7 +143,9 @@ export function UserList() {
                                     <TableBody>
                                         {filteredUsers.length === 0 && (
                                             <TableRow>
-                                                <TableCell colSpan={5} align="center">Nenhum usuário encontrado.</TableCell>
+                                                <TableCell colSpan={5} align="center">
+                                                    {!loading ? <CircularProgress size={32} color="info" /> : 'Nenhum usuário encontrado.'}
+                                                </TableCell>
                                             </TableRow>
                                         )}
                                         {filteredUsers.map((user) => (

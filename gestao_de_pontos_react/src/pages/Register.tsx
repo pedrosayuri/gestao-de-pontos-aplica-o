@@ -16,7 +16,7 @@ import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import FormHelperText from '@mui/material/FormHelperText';
-import { Grid, SelectChangeEvent } from '@mui/material';
+import { CircularProgress, Grid, SelectChangeEvent } from '@mui/material';
 import { Container, MenuItem, Select, Typography, Button } from "@mui/material";
 
 interface DecodedToken {
@@ -47,6 +47,7 @@ export function Register() {
 
     const [tokenIsValid, setTokenIsValid] = useState(false);
     const [isUserAdmin, setIsUserAdmin] = useState(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const [showPassword, setShowPassword] = React.useState(false);
     const [userRole, setUserRole] = React.useState("");
@@ -143,6 +144,7 @@ export function Register() {
         }
 
         try {
+            setLoading(true);
             await axios.post(`${apiUrl}/users/`, {
                 email: email,
                 username: name,
@@ -158,11 +160,14 @@ export function Register() {
             setSnackbarMessage('Usuário criado com sucesso!');
             setSnackbarSeverity('success');
         } catch (error) {
+            setLoading(false);
             if (axios.isAxiosError(error)) {
                 setSnackbarOpen(true);
                 setSnackbarMessage('Não foi possível cadastrar esse usuário, por favor tente novamente!');
                 setSnackbarSeverity('error');
             }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -267,7 +272,7 @@ export function Register() {
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Button variant="contained" onClick={handleSubmit} fullWidth>Cadastrar</Button>
+                                    <Button variant="contained" onClick={handleSubmit} fullWidth disabled={loading}>{loading ? <CircularProgress size={24} color="info" /> : 'Cadastrar'}</Button>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Button variant="contained" color="error" onClick={() => navigate('/home')} fullWidth>Voltar</Button>
