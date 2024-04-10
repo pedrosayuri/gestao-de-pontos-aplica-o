@@ -106,6 +106,10 @@
 
      - Listagem de Usuários
 
+     - Edição de Usuários
+
+     - Remoção de Usuários
+
      - Listagem de Pontos
 
 ### Usuário Comum
